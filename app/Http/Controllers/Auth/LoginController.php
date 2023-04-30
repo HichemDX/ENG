@@ -42,7 +42,7 @@ class LoginController extends Controller
   protected function authenticated(\Symfony\Component\HttpFoundation\Request $request, $user)
   {
     if ($user->hasRole('admin')) {
-      return redirect()->route('admin.index');
+      return redirect('/admin');
     }
     if ($user->hasRole('controle_de_gestion')) {
       return redirect()->route('controle-de-gestion.create', ['unit' => 'default_value']);

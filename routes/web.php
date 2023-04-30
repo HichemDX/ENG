@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-  return view('welcome');
+  return redirect ('login');
 });
 Auth::routes();
 
@@ -149,7 +149,9 @@ Route::get('/test-relation', function() {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
   Route::resource('admin', AdminsController::class);
-  Route::get('/admin/{date}', [AdminsController::class, 'index']);
+  Route::get('/admin', [AdminsController::class, 'index'])->name('admin');
+  Route::get('/admin/edit/{journal}', [JournalsController::class, 'edit'])->name('admin.edit');
+  Route::put('/admin/edit/{id}', [JournalsController::class, 'update'])->name('admin.update');
  
   
 ################################# units ########################################

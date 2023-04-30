@@ -170,17 +170,24 @@
                                 <th class="px-4 py-3 bg-blue-400">Taux Vente</th>
                                 <th class="px-4 py-3 bg-green-200">Previsions Production Vendue</th>
                                 <th class="px-4 py-3 bg-green-200">Réalisations Production Vendue</th>
-                                <th class="px-4 py-3 bg-green-500">Taux Production Vendue</th>
-
+                                <th class="px-4 py-3 bg-green-400">Taux Production Vendue</th>
+                                @if (request()->has('submit'))
+                                    <th class="px-4 py-3 bg-yellow-500">Modifier</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y">
+
                             @php
                                 $descriptions = [];
                             @endphp
 
                             @foreach ($units as $unit)
                                 @foreach ($unit->journals as $journal)
+                                    @php
+                                        $id = $journal->id;
+                                    @endphp
+
                                     @if ($journal->date === $selectedDate || $unit->id === $unit_id)
                                         @php
                                             $description = $journal->description;
@@ -204,9 +211,7 @@
                                                         @endforeach
                                                     @endforeach
                                                 @endforeach
-                                                @php
-    $id = $journal->id;
-@endphp
+
 
                                                 <td>{{ $journal->Previsions_Production }}</td>
                                                 <td>{{ $journal->Realisation_Production }}</td>
@@ -220,13 +225,18 @@
                                                 <td>{{ $journal->Realisation_ProductionVendue }}</td>
                                                 <td>{{ $journal->Previsions_ProductionVendue != 0 ? round(($journal->Realisation_ProductionVendue / $journal->Previsions_ProductionVendue) * 100, 2) : 'N/A' }}%
                                                 </td>
-                                            
-                                                      
+                                                <td>
+                                                    <div class="flex justify-center text-center">
+                                                        <a href="{{ route('admin.edit', ['id' => $journal->id]) }}"
+                                                            class="bg-red-500 py-2 px-4 text-xs text-white font-normal rounded-lg hover:bg-red-800 w-full">Modifier</a>
+                                                    </div>
+                                                </td>
                                             @endif
 
                                         </tr>
                                     @endif
                                 @endforeach
+
                                 @if (request()->has('cumule'))
                                     @foreach ($journalTotals as $date => $totals)
                                         @php
@@ -248,12 +258,13 @@
                                             </td>
 
 
+                                            <td>{{ $totals['Previsions_ProductionVendue'] }}</td>
                                             <td>{{ $totals['Realisation_ProductionVendue'] }}</td>
                                             <td>{{ $totals['Previsions_ProductionVendue'] != 0 ? round(($totals['Realisation_ProductionVendue'] / $totals['Previsions_ProductionVendue']) * 100, 2) : 'N/A' }}%
-                                            
+
                                             </td>
-                                                                           
-                                          </tr>
+
+                                        </tr>
                                     @endforeach
                                 @endif
                             @endforeach

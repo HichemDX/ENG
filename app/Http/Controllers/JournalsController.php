@@ -190,61 +190,63 @@ class JournalsController extends Controller
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit(Journal $journal)
-  {
-    // Récupérer l'utilisateur connecté
+  public function edit(string $id)
+{
+
+  $journal = Journal::find($id);
+  $journal = Journal::find($id);
+  if (!$journal) { };
     $user = Auth::user();
-
-    // Récupérer les unités de l'utilisateur connecté
     $units = $user->units;
-
-    // Récupérer les activités pour chaque unité de l'utilisateur connecté
     $activites = collect();
     foreach ($units as $unit) {
-      $activites = $activites->merge($unit->activites);
+        $activites = $activites->merge($unit->activites);
     }
-
-    // Récupérer les familles pour chaque activité
     $familles = collect();
     foreach ($activites as $activite) {
-      $familles = $familles->merge($activite->familles);
+        $familles = $familles->merge($activite->familles);
     }
-
-    // Récupérer les produits pour chaque famille
     $produits = collect();
     foreach ($familles as $famille) {
-      $produits = $produits->merge($famille->produits()->with('mesure')->get());
+        $produits = $produits->merge($famille->produits()->with('mesure')->get());
     }
-
-    // Passer le journal à la vue edit ainsi que les autres informations récupérées
+    
     return view('admin.edit', compact('journal', 'user', 'units', 'activites', 'familles', 'produits'));
-  }
+}
 
-  /**
-   * Update the specified resource in storage.
-   */
-  public function update(Request $request, Journal $journal)
-  {
-    // validate the form data
+public function update(Request $request, $id)
+{
     $validatedData = $request->validate([
-      'unit_id' => 'required|integer',
-      'produit_id' => 'required|integer',
-      'Previsions_Production' => 'required|numeric',
-      'Previsions_Vent' => 'required|numeric',
-      'Previsions_ProductionVendue' => 'required|numeric',
-      'Realisation_Production' => 'required|numeric',
-      'Realisation_Vent' => 'required|numeric',
-      'Realisation_ProductionVendue' => 'required|numeric',
-      'description' => 'required',
-      'date' => 'required|date',
+        // 'unit_id' => 'required|integer',
+        // 'produit_id' => 'required|integer',
+        'Previsions_Production' => 'required|numeric',
+        'Previsions_Vent' => 'required|numeric',
+        'Previsions_ProductionVendue' => 'required|numeric',
+        'Realisation_Production' => 'required|numeric',
+        'Realisation_Vent' => 'required|numeric',
+        'Realisation_ProductionVendue' => 'required|numeric',
+        'description' => 'required',
+        'date' => 'required|date',
     ]);
-  
-    // update the journal with the new data
-    $journal->update($validatedData);
-  
-    // redirect to the journals index page with a success message
-    return redirect()->route('admin.index')->with('success', 'Journal entry updated successfully');
-  }
+    $journal = Journal::find($id);
+    if ($journal) {
+        // $journal->unit_id = $validatedData['unit_id'];
+        // $journal->produit_id = $validatedData['produit_id'];
+        $journal->Previsions_Production = $validatedData['Previsions_Production'];
+        $journal->Previsions_Vent = $validatedData['Previsions_Vent'];
+        $journal->Previsions_ProductionVendue = $validatedData['Previsions_ProductionVendue'];
+        $journal->Realisation_Production = $validatedData['Realisation_Production'];
+        $journal->Realisation_Vent = $validatedData['Realisation_Vent'];
+        $journal->Realisation_ProductionVendue = $validatedData['Realisation_ProductionVendue'];
+        $journal->description = $validatedData['description'];
+        $journal->date = $validatedData['date'];
+    
+        $journal->save();
+    }
+    
+
+    return redirect()->route('admin');
+}
   
 
 

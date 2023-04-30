@@ -124,21 +124,27 @@
 
 
         <center>
-          <div class="flex w-full justify-between p-4 px-10 items-center mt-20">
-            <div class="flex items-center">
-                <h1 class="text-3xl font-bold">{{ now()->format('Y-m-d') }}</h1>
-                <form method="GET" class="flex gap-4 items-center ml-4 justify-start">
-                    <input type="date" id="selected_date" name="selected_date" value="{{ $selectedDate }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-orange-500 focus:border-orange-500 block w-full pl-10 p-2.5">
-                    <button class="bg-[#F16B07] text-white p-2 pr-4 pl-4 rounded-full hover:bg-[#af540e]" type="submit" name="submit" value="selected_date">Filter</button>
-                
+            <div class="flex w-full justify-between p-4 px-10 items-center mt-20">
+                <div class="flex items-center">
+                    <h1 class="text-3xl font-bold">{{ now()->format('Y-m-d') }}</h1>
+                    <form method="GET" class="flex gap-4 items-center ml-4 justify-start">
+                        <input type="date" id="selected_date" name="selected_date" value="{{ $selectedDate }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-orange-500 focus:border-orange-500 block w-full pl-10 p-2.5">
+                        <button class="bg-[#F16B07] text-white p-2 pr-4 pl-4 rounded-full hover:bg-[#af540e]"
+                            type="submit" name="submit" value="selected_date">Filter</button>
+
+                </div>
+                <div class="flex gap-4">
+                    <button
+                        class="bg-[#F16B07] text-white shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] p-2 pr-4 pl-4 rounded-full hover:bg-[#af540e]"
+                        type="submit" name="cumule" value="cumule">Cumule</button>
+                    <button
+                        class="bg-[#F16B07] text-white shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] p-2 pr-4 pl-4 rounded-full hover:bg-[#af540e]"
+                        type="submit" name="cumule_jfm" value="cumule_jfm">Cumule Trimestriel</button>
+                </div>
+                </form>
             </div>
-            <div class="flex gap-4">
-                <button class="bg-[#F16B07] text-white shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] p-2 pr-4 pl-4 rounded-full hover:bg-[#af540e]" type="submit" name="cumule" value="cumule">Cumule</button>
-                <button class="bg-[#F16B07] text-white shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] p-2 pr-4 pl-4 rounded-full hover:bg-[#af540e]" type="submit" name="cumule_jfm" value="cumule_jfm">Cumule Trimestriel</button>
-            </div>
-          </form>
-        </div>
-        
+
 
             <div class="w-full p-2 overflow-hidden rounded-lg shadow-xs pt-5">
                 <div class="w-full overflow-x-auto">
@@ -233,23 +239,23 @@
                                                             : 0;
                                                     return $ratio;
                                                 }) >= 100) class="bg-green-300"
-                  @elseif(
-                      $activity->units->sum(function ($unit) use ($journalTotals) {
-                          $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
-                          $ratio =
-                              $previsionsProduction != 0
-                                  ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
-                                  : 0;
-                          return $ratio;
-                      }) >= 80 &&
-                          $activity->units->sum(function ($unit) use ($journalTotals) {
-                              $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
-                              $ratio =
-                                  $previsionsProduction != 0
-                                      ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
-                                      : 0;
-                              return $ratio;
-                          }) < 100) class="bg-yellow-300" @else class="bg-red-500" @endif>
+                                            @elseif(
+                                                $activity->units->sum(function ($unit) use ($journalTotals) {
+                                                    $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
+                                                    $ratio =
+                                                        $previsionsProduction != 0
+                                                            ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
+                                                            : 0;
+                                                    return $ratio;
+                                                }) >= 80 &&
+                                                    $activity->units->sum(function ($unit) use ($journalTotals) {
+                                                        $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
+                                                        $ratio =
+                                                            $previsionsProduction != 0
+                                                                ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
+                                                                : 0;
+                                                        return $ratio;
+                                                    }) < 100) class="bg-yellow-300" @else class="bg-red-500" @endif>
                                             {{ $activity->units->sum(function ($unit) use ($journalTotals) {
                                                 $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
                                                 $ratio =
@@ -257,7 +263,7 @@
                                                         ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
                                                         : 0;
                                                 return number_format($ratio, 2); // affiche le résultat avec 2 décimales
-                                            }) }}
+                                            }) . '%' }}
                                         </td>
 
                                         <td class="bg-amber-100">
@@ -269,44 +275,42 @@
                                         <td
                                             @if (
                                                 $activity->units->sum(function ($unit) use ($journalTotals) {
-                                                    $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
+                                                    $previsionsProduction = $journalTotals[$unit->id]['Previsions_Vent'];
                                                     $ratio =
                                                         $previsionsProduction != 0
-                                                            ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
+                                                            ? ($journalTotals[$unit->id]['Realisation_Vent'] / $previsionsProduction) * 100
                                                             : 0;
                                                     return $ratio;
                                                 }) >= 100) class="bg-green-300"
-                  @elseif(
-                      $activity->units->sum(function ($unit) use ($journalTotals) {
-                          $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
-                          $ratio =
-                              $previsionsProduction != 0
-                                  ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
-                                  : 0;
-                          return $ratio;
-                      }) >= 80 &&
-                          $activity->units->sum(function ($unit) use ($journalTotals) {
-                              $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
-                              $ratio =
-                                  $previsionsProduction != 0
-                                      ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
-                                      : 0;
-                              return $ratio;
-                          }) < 100) class="bg-yellow-300" @else class="bg-red-500" @endif>
+                                            @elseif(
+                                                $activity->units->sum(function ($unit) use ($journalTotals) {
+                                                    $previsionsProduction = $journalTotals[$unit->id]['Previsions_Vent'];
+                                                    $ratio =
+                                                        $previsionsProduction != 0
+                                                            ? ($journalTotals[$unit->id]['Realisation_Vent'] / $previsionsProduction) * 100
+                                                            : 0;
+                                                    return $ratio;
+                                                }) >= 80 &&
+                                                    $activity->units->sum(function ($unit) use ($journalTotals) {
+                                                        $previsionsProduction = $journalTotals[$unit->id]['Previsions_Vent'];
+                                                        $ratio =
+                                                            $previsionsProduction != 0
+                                                                ? ($journalTotals[$unit->id]['Realisation_Vent'] / $previsionsProduction) * 100
+                                                                : 0;
+                                                        return $ratio;
+                                                    }) < 100) class="bg-yellow-300" @else class="bg-red-500" @endif>
                                             {{ $activity->units->sum(function ($unit) use ($journalTotals) {
-                                                $previsionsProduction = $journalTotals[$unit->id]['Previsions_Production'];
+                                                $previsionsProduction = $journalTotals[$unit->id]['Previsions_Vent'];
                                                 $ratio =
-                                                    $previsionsProduction != 0
-                                                        ? ($journalTotals[$unit->id]['Realisation_Production'] / $previsionsProduction) * 100
-                                                        : 0;
+                                                    $previsionsProduction != 0 ? ($journalTotals[$unit->id]['Realisation_Vent'] / $previsionsProduction) * 100 : 0;
                                                 return number_format($ratio, 2); // affiche le résultat avec 2 décimales
-                                            }) }}
+                                            }) . '%' }}
                                         </td>
 
                                         <td class="bg-amber-100">
                                             {{ $activity->units->sum(function ($unit) use ($journalTotals) {return $journalTotals[$unit->id]['Previsions_ProductionVendue'];}) }}
                                             @php
-                                                $sum1 += $activity->units->sum(function ($unit) use ($journalTotals) {
+                                                $sum2 += $activity->units->sum(function ($unit) use ($journalTotals) {
                                                     return $journalTotals[$unit->id]['Previsions_ProductionVendue'];
                                                 }); // Add the sum for this unit to $sum1
                                             @endphp
@@ -315,7 +319,7 @@
                                             {{ $activity->units->sum(function ($unit) use ($journalTotals) {return $journalTotals[$unit->id]['Realisation_ProductionVendue'];}) }}
                                         </td>
                                         @php
-                                            $sum2 += $activity->units->sum(function ($unit) use ($journalTotals) {
+                                            $sum1 += $activity->units->sum(function ($unit) use ($journalTotals) {
                                                 return $journalTotals[$unit->id]['Realisation_ProductionVendue'];
                                             }); // Add the sum for this unit to $sum1
                                         @endphp
@@ -323,31 +327,33 @@
                                         <td
                                             @if (
                                                 $activity->units->sum(function ($unit) use ($journalTotals) {
-                                                    $realisationProduction = $journalTotals[$unit->id]['Realisation_Production'];
+                                                    $realisationProduction = $journalTotals[$unit->id]['Previsions_ProductionVendue'];
                                                     $realisationProductionVendue = $journalTotals[$unit->id]['Realisation_ProductionVendue'];
-                                                    $ratio = $realisationProductionVendue != 0 ? ($realisationProduction / $realisationProductionVendue) * 100 : 0;
+                                                    $ratio = $realisationProduction != 0 ? ($realisationProductionVendue / $realisationProduction) * 100 : 0;
                                                     return $ratio;
                                                 }) >= 100) class="bg-green-300"
-                  @elseif(
-                      $activity->units->sum(function ($unit) use ($journalTotals) {
-                          $realisationProduction = $journalTotals[$unit->id]['Realisation_Production'];
-                          $realisationProductionVendue = $journalTotals[$unit->id]['Realisation_ProductionVendue'];
-                          $ratio = $realisationProductionVendue != 0 ? ($realisationProduction / $realisationProductionVendue) * 100 : 0;
-                          return $ratio;
-                      }) >= 80 &&
-                          $activity->units->sum(function ($unit) use ($journalTotals) {
-                              $realisationProduction = $journalTotals[$unit->id]['Realisation_Production'];
-                              $realisationProductionVendue = $journalTotals[$unit->id]['Realisation_ProductionVendue'];
-                              $ratio =
-                                  $realisationProductionVendue != 0 ? ($realisationProduction / $realisationProductionVendue) * 100 : 0;
-                              return $ratio;
-                          }) < 100) class="bg-yellow-300" @else class="bg-red-500" @endif>
-                                            {{ $activity->units->sum(function ($unit) use ($journalTotals) {
-                                                $realisationProduction = $journalTotals[$unit->id]['Realisation_Production'];
-                                                $realisationProductionVendue = $journalTotals[$unit->id]['Realisation_ProductionVendue'];
-                                                $ratio = $realisationProductionVendue != 0 ? ($realisationProduction / $realisationProductionVendue) * 100 : 0;
-                                                return number_format($ratio, 2); // affiche le résultat avec 2 décimales
-                                            }) }}
+                                            @elseif(
+                                                $activity->units->sum(function ($unit) use ($journalTotals) {
+                                                    $realisationProduction = $journalTotals[$unit->id]['Previsions_ProductionVendue'];
+                                                    $realisationProductionVendue = $journalTotals[$unit->id]['Realisation_ProductionVendue'];
+                                                    $ratio = $realisationProduction != 0 ? ($realisationProductionVendue / $realisationProduction) * 100 : 0;
+                                                    return $ratio;
+                                                }) >= 80 &&
+                                                    $activity->units->sum(function ($unit) use ($journalTotals) {
+                                                        $realisationProduction = $journalTotals[$unit->id]['Previsions_ProductionVendue'];
+                                                        $realisationProductionVendue = $journalTotals[$unit->id]['Realisation_ProductionVendue'];
+                                                        $ratio = $realisationProduction != 0 ? ($realisationProductionVendue / $realisationProduction) * 100 : 0;
+                                                        return $ratio;
+                                                    }) < 100) class="bg-yellow-300" @else class="bg-red-500" @endif>
+                                            {{ number_format(
+                                                $activity->units->sum(function ($unit) use ($journalTotals) {
+                                                    $realisationProduction = $journalTotals[$unit->id]['Previsions_ProductionVendue'];
+                                                    $realisationProductionVendue = $journalTotals[$unit->id]['Realisation_ProductionVendue'];
+                                                    $ratio = $realisationProduction != 0 ? ($realisationProductionVendue / $realisationProduction) * 100 : 0;
+                                                    return $ratio;
+                                                }),
+                                                2,
+                                            ) . '%' }}
                                         </td>
 
 
@@ -355,7 +361,6 @@
                                 @endforeach
 
                             @endif
-
                         </tbody>
                     </table>
 
@@ -365,12 +370,11 @@
                     class="bg-white shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] w-full my-8 p-2 flex justify-between items-center">
                     <h1 class="text-3xl font-bold ">TOTAL</h1>
                     <div class="flex items-center w-[31%] justify-between">
-                        <h1 class="text-2xl ">{{ $sum1 }}</h1>
                         <h1 class="text-2xl ">{{ $sum2 }}</h1>
+                        <h1 class="text-2xl ">{{ $sum1 }}</h1>
                         <h1
                             class=" text-2xl w-max p-2 rounded-2xl @if ($sum2 != 0) {{ ($sum1 / $sum2) * 100 >= 100 ? 'bg-green-400' : (($sum1 / $sum2) * 100 >= 80 ? 'bg-yellow-400' : 'bg-red-400') }} @endif">
-                            {{ $sum2 != 0 ? number_format(($sum1 / $sum2) * 100, 2) : '-' }}
-                        </h1>
+                            {{ $sum2 != 0 ? number_format(($sum1 / $sum2) * 100, 2) : '-' }}% </h1>
                     </div>
 
                 </div>
